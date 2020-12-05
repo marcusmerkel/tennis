@@ -12,7 +12,7 @@ So she asked me to make a web application for being able to let her friends make
 
 My Django project consists of _two_ Django apps. One, the `tenniscourts` part, purely consists of **Python/Django** and is the **database/backend** part of the project. The other one, `reservations`, is the **frontend** part that is built in a little bit of **Python/Django** and **mostly JavaScript/React**.
 
-## Backend - "tenniscourts"
+## Backend - `"tenniscourts"`
 
 The `tenniscourts` part hosts the database and backend operations. 
 
@@ -33,7 +33,7 @@ The **`tenniscourts/urls.py`** lists the available routes of the API, the **`ten
 - **`api/profile`** returns all future reservations of the currently logged in user
 - **`api/`** is only a joke and returns an HTTP "Hi!" ;-)
 
-## Frontend - "reservations"
+## Frontend - `"reservations"`
 
 The `reservations` part hosts the frontend part of the application that deals with the backend and renders the user interface. While writing this, I learned a lot about _React_, _JSX_ and _JavaScript_ in total, which led me to thinking in dimensions of React Components rather than the raw DOM only.
 
