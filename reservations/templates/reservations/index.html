@@ -1,0 +1,18 @@
+{% extends "reservations/layout.html" %}
+
+{% block title %}
+Tennis Booking
+{% endblock %}
+{% block body %}
+
+<div id="app"></div>
+
+<div id="add"></div>
+
+{% endblock %}
+
+{% block script %}
+{% load static %}
+<script src="{% static 'reservations/main.js/main.js' %}"></script>
+{{ request.user.username|json_script:"username" }}
+{% endblock %}

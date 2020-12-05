@@ -1,0 +1,57 @@
+.weektable {
+    max-width: 100vw;
+    max-height: 600px;
+}
+
+.daytable {
+    max-width: 650px;
+    max-height: 600px;
+}
+
+.weektable td {
+    max-width: 12vw;
+}
+
+.table td, .table th {
+    text-align: center;
+    padding: .5rem !important;
+}
+
+td.av4 {
+    background-color: forestgreen;
+    cursor: pointer;
+}
+
+td.av3 {
+    background-color: yellowgreen;
+    cursor: pointer;
+}
+
+td.av2 {
+    background-color: gold;
+    cursor: pointer;
+}
+
+td.av1 {
+    background-color: lightsalmon;
+    cursor: pointer;
+}
+
+td.av0 {
+    background-color: darkred;
+}
+
+td.d-av1 {
+    background-color: forestgreen;
+    cursor: pointer;
+}
+
+td.d-av0 {
+    background-color: darkred;
+}
+
+.weektable td.av4, .weektable td.av3, .weektable td.av2, .weektable td.av1, .weektable td.av0, .daytable td.d-av1, .daytable td.d-av0 {
+    
+    border-left: solid 3px white;
+    border-right: solid 3px white;
+}
