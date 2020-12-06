@@ -73,7 +73,7 @@ class DayRow extends Component {
     render() {
         const cells = [];
         for (let i = 0; i < 4; i++) { // key and also id = "court:hour"  
-            const key = String(i + 1) + ":" + String(this.props.hour + 8);
+            const key = this.props.today.toISOString().split("T")[0] + ":" + String(i + 1) + ":" + String(this.props.hour + 8);
             const av  = this.props.matrix[this.props.hour][i];
             const cl = av === 1 ? this.props.handleHourClick : null;
             cells.push(<HourCell av={av} key={key} id={key} onClick={cl} />)
@@ -152,7 +152,7 @@ class DayCalendar extends Component {
         let rows = [];
         // running through the hours from 8 to 22 (or 0 to 14)
         for (let i = 0; i < 14; i++) {
-            rows.push(<DayRow key={i} hour={i} matrix={this.state.matrix} handleHourClick={this.props.handleCourtHourClick} />)
+            rows.push(<DayRow key={i} hour={i} today={this.state.today} matrix={this.state.matrix} handleHourClick={this.props.handleCourtHourClick} />)
         }
 
         return (

@@ -36,10 +36,12 @@ class App extends Component {
 
     handleCourtHourClick(e) {
         const id = e.target.id; // court:hour
-        const court = id.split(":")[0];
-        const hour  = id.split(":")[1];
+        const date  = id.split(":")[0];
+        const court = id.split(":")[1];
+        const hour  = id.split(":")[2];
         this.setState({
             newResDefault: {
+                day: date,
                 court: court,
                 start: hour
             },
