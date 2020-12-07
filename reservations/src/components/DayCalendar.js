@@ -56,7 +56,7 @@ class HourCell extends Component {
     } // gets number of available courts, key & id as props
 
     render() {
-        let colorClass = "d-av" + this.props.av;
+        const colorClass = "d-av" + this.props.av;
         
         return (
             <td id={this.props.id} className={colorClass + " mx-1"} onClick={this.props.onClick}></td>
