@@ -67,15 +67,17 @@ This is the basic JS file that uses the _ReactDOM_ to render the **`App`** Compo
     - `TimeSelect`
 - **`SiteHeading`**
 
-... and two helpers, `formatTime.js` and `getCookie.js`.
+... and three helpers, `formatTime.js`, `formatDate.js` and `getCookie.js`.
 
 #### App.js
 
-This is the top-level parent Component that handles all the other views (component renderings). It has a **date** (mostly the actual _today_) as well as the **name of the view** to display as _state_, as well as some prefill-values for the NewReservation-component in special cases. Whenever the "view"-state changes, the parent component will re-render and display the respective child component/view.
+This is the top-level parent Component that handles all the other views (component renderings). It has a date value named **today** (because it's initially the actual _today_) as well as the **name of the view** to display as _state_, as well as some prefill-values for the NewReservation-component in special cases. Whenever the "view"-state changes, the parent component will re-render and display the respective child component/view.
+
+The "today"-state also determines which date will be displayed by the child components _DayCalendar_ and _WeekCalendar_.
 
 #### DayCalendar.js
 
-This is the default view of the app: A **calendar of one day** (default: actual today) with one row per hour and one column per tennis court that displays which court is at what time available (colored green) or occupied (colored red).
+This is the default view of the app: A **calendar of one day** (default: actual today) with one row _per hour_ and one column _per tennis court_ that displays which court is at what time available (colored green) or occupied (colored red).
 
 It has as child components the _TableHead_, the _DayNav_ (navigation to move forward up to 14 days into the future) to change the displayed day or change to the New-Reservation-view, as well as a list of _DayRows_ (one table row per hour) that themselves consist of _HourCells_.
 
@@ -83,7 +85,7 @@ All the "available" HourCells have a click-handler that will trigger a pre-fille
 
 #### WeekCalendar.js
 
-Similar to the _DayCalendar_, but displaying like a heatmap of available courts per time of day. The **calendar shows one week** with one row per hour and one column _per day_, the colors show **how many courts are available for each hour on each day** - from dark green (4 available) to dark red (all booked). 
+Similar to the _DayCalendar_, but displaying like a heatmap of available courts per time of day. The **calendar shows one week** with one row _per hour_ and one column _per day_, the colors show **how many courts are available for each hour on each day** - from dark green (4 available) to dark red (all booked). 
 
 It also has a navigation (_WeekNav_) to move one day forward (up to two weeks into the future) or backward (back until the actual date), the _WeekTableHead_ child, and of course a list of _WeekRows_, themselves consisting of _HourCells_.
 
@@ -112,6 +114,10 @@ This is just the header component that acts like a heading template for each of 
 ##### formatTime.js
 
 Takes an "hour" argument (between 8 and 22) and returns the according pendant between 8 AM and 10 PM.
+
+##### formatDate.js
+
+Takes a date object and returns a date string in the format yyyy-mm-dd.
 
 ##### getCookie.js
 
