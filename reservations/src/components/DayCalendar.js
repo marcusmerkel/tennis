@@ -73,7 +73,7 @@ class DayRow extends Component {
     render() {
         const cells = [];
         for (let i = 0; i < 4; i++) { // key and also id = "court:hour"  
-            const key = this.props.today.toISOString().split("T")[0] + ":" + String(i + 1) + ":" + String(this.props.hour + 8);
+            const key = String(i + 1) + ":" + String(this.props.hour + 8);
             const av  = this.props.matrix[this.props.hour][i];
             const cl = av === 1 ? this.props.handleHourClick : null;
             cells.push(<HourCell av={av} key={key} id={key} onClick={cl} />)
@@ -97,15 +97,14 @@ class DayCalendar extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            today: this.props.today,
             matrix: Array(14).fill().map(() => Array(4).fill(0))
         }
     }
 
     componentDidMount() {
-        let year  = this.state.today.getFullYear()
-        let month = this.state.today.getMonth() + 1 // January is 0!
-        let day   = this.state.today.getDate()
+        let year  = this.props.today.getFullYear()
+        let month = this.props.today.getMonth() + 1 // January is 0!
+        let day   = this.props.today.getDate()
         const request = new Request(
             `/api/day/${year}/${month}/${day}`,
             {headers: {}}
@@ -118,41 +117,34 @@ class DayCalendar extends Component {
         });
     }
 
-    handleNavClick(e) {
-        let i = 0;
-        if (e.target.id === "forward") {
-            i = 1;
-        } else {
-            i = -1;
+    componentDidUpdate(prevProps) {
+        if (this.props.today !== prevProps.today) {
+            let year  = this.props.today.getFullYear()
+            let month = this.props.today.getMonth() + 1 // January is 0!
+            let day   = this.props.today.getDate()
+            const request = new Request(
+                `/api/day/${year}/${month}/${day}`,
+                {headers: {}}
+            );
+
+            fetch(request)
+            .then(response => response.json())
+            .then(matrix => {
+                this.setState({
+                    matrix: matrix,
+                });
+            });
         }
-        const new_today = new Date(this.state.today.getFullYear(), this.state.today.getMonth(), this.state.today.getDate() + i);
-        this.setState({
-            today: new_today
-        });
-
-        let year  = new_today.getFullYear()
-        let month = new_today.getMonth() + 1 // January is 0!
-        let day   = new_today.getDate()
-        const request = new Request(
-            `/api/day/${year}/${month}/${day}`,
-            {headers: {}}
-        );
-
-        fetch(request)
-        .then(response => response.json())
-        .then(matrix => {
-            this.setState({matrix: matrix});
-        });
     }
     
     render() {
-        const title = this.state.today.toLocaleDateString("en-US", {weekday: 'long', day: 'numeric', month: 'numeric', year: 'numeric'});
+        const title = this.props.today.toLocaleDateString("en-US", {weekday: 'long', day: 'numeric', month: 'numeric', year: 'numeric'});
         const heading = SiteHeading({title: title});
-        const nav = <DayNav today={this.state.today} onClick={(e) => this.handleNavClick(e)} weekClick={this.props.weekClick} newResClick={this.props.newResClick} />
+        const nav = <DayNav today={this.props.today} onClick={this.props.navClick} weekClick={this.props.weekClick} newResClick={this.props.newResClick} />
         let rows = [];
         // running through the hours from 8 to 22 (or 0 to 14)
         for (let i = 0; i < 14; i++) {
-            rows.push(<DayRow key={i} hour={i} today={this.state.today} matrix={this.state.matrix} handleHourClick={this.props.handleCourtHourClick} />)
+            rows.push(<DayRow key={i} hour={i} today={this.props.today} matrix={this.state.matrix} handleHourClick={this.props.handleCourtHourClick} />)
         }
 
         return (
@@ -160,7 +152,7 @@ class DayCalendar extends Component {
                 {heading}
                 {nav}
                 <table className="table daytable table-responsive-sm">
-                    {DayTableHead({today: this.state.today, weekday: this.state.today.getDay()})}
+                    {DayTableHead({today: this.props.today, weekday: this.props.today.getDay()})}
                     <tbody>
                         {rows}
                     </tbody>

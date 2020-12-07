@@ -1,7 +1,8 @@
 import React, { Component } from "react";
+
+import formatDate from "./formatDate";
 import getCookie from "./getCookie";
 import SiteHeading from "./SiteHeading";
-
 
 class TimeSelect extends Component {
     render() {
@@ -26,11 +27,11 @@ class NewReservation extends Component {
         this.state = {
             message: "",
             court: this.props.newResDefault.court ? this.props.newResDefault.court : 1,
-            date: this.props.newResDefault.day ? this.props.newResDefault.day : (new Date()).toISOString().split("T")[0],
             start_time: this.props.newResDefault.start ? parseInt(this.props.newResDefault.start) : 8,
             end_time: this.props.newResDefault.start ? parseInt(this.props.newResDefault.start) + 1 : 9,
+            date: this.props.newResDefault.day ? this.props.newResDefault.day : formatDate(this.props.today),
             invalidTimes: false
-        }
+        } 
     }
 
     handleSubmit(evt) {
@@ -119,7 +120,6 @@ class NewReservation extends Component {
     render(){
         const heading = SiteHeading({title: "Reserve a court"});
         const today = new Date();
-        const twoWeeks = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 14);
         const message = this.state.message ? <div className="text-danger mb-3">{this.state.message}</div> : "";
         const timeClass = this.state.invalidTimes ? "form-control is-invalid" : "form-control";
 
@@ -137,15 +137,18 @@ class NewReservation extends Component {
                         </select>
                     </div>
                     <div className="form-group">
+                        {/* Date Input */}
                         <label htmlFor="date">Date</label>
-                        <input id="date" name="date" className="form-control" type="date" onChange={(evt) => this.handleFormChange(evt)} value={this.state.date} min={today.toISOString().split("T")[0]} max={(new Date(Date.now() + 12096e5)).toISOString().split("T")[0]}></input>
+                        <input id="date" name="date" className="form-control" type="date" onChange={(evt) => this.handleFormChange(evt)} value={this.state.date} min={formatDate(today)} max={formatDate(new Date(Date.now() + 12096e5))}></input>
                     </div>
                     <div className="form-row">
                         <div className="form-group col-md-6">
+                            {/* Time "Start" Input */}
                             <label htmlFor="start_time">Start (h)</label>
                             <TimeSelect id="start_time" className={timeClass} value={this.state.start_time} starttime="8" endtime="22" onChange={(evt) => this.handleFormChange(evt)} />
                         </div>
                         <div className="form-group col-md-6">
+                            {/* Time "End" Input */}
                             <label htmlFor="end_time">End (h)</label>
                             <TimeSelect id="end_time" className={timeClass} value={this.state.end_time} starttime="9" endtime="23" onChange={(evt) => this.handleFormChange(evt)} />
                         </div>

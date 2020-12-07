@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+
+import formatDate from "./formatDate";
 import SiteHeading from "./SiteHeading";
 
 const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -77,7 +79,7 @@ class WeekRow extends Component {
     render() {
         const cells = [];
         for (let i = 0; i < 7; i++) {
-            const key = (new Date(Date.now() + (86400000 * i))).toISOString().split("T")[0] + ":" + String(this.props.hour + 8); // key = date:hour
+            const key = formatDate(new Date(Date.now() + (86400000 * i))) + ":" + String(this.props.hour + 8); // key = date:hour
             const av = this.props.matrix[i][this.props.hour];
             const cl = av > 0 ? this.props.handleHourClick : null;
             cells.push(<HourCell av={av} id={key} key={key} onClick={cl} />)
@@ -100,17 +102,15 @@ class WeekRow extends Component {
 class WeekCalendar extends Component {
     constructor(props) {
         super(props);
-        const today = new Date();
         this.state = {
-            today: today,
             matrix: Array(7).fill().map(() => Array(14).fill(0))
         }
     }
 
     componentDidMount() {
-        let year  = this.state.today.getFullYear()
-        let month = this.state.today.getMonth() + 1 // January is 0!
-        let day   = this.state.today.getDate()
+        let year  = this.props.today.getFullYear()
+        let month = this.props.today.getMonth() + 1 // January is 0!
+        let day   = this.props.today.getDate()
         const request = new Request(
             `/api/week/${year}/${month}/${day}`,
             {headers: {}}
@@ -123,37 +123,28 @@ class WeekCalendar extends Component {
         });
     }
 
-    handleNavClick(e) {
-        let i = 0;
-        if (e.target.id === "forward") {
-            i = 1;
-        } else {
-            i = -1;
+    componentDidUpdate(prevProps) {
+        if (this.props.today !== prevProps.today) {
+            let year  = this.props.today.getFullYear()
+            let month = this.props.today.getMonth() + 1 // January is 0!
+            let day   = this.props.today.getDate()
+            const request = new Request(
+                `/api/week/${year}/${month}/${day}`,
+                {headers: {}}
+            );
+
+            fetch(request)
+            .then(response => response.json())
+            .then(matrix => {
+                this.setState({matrix: matrix});
+            });
         }
-        const new_today = new Date(this.state.today.getFullYear(), this.state.today.getMonth(), this.state.today.getDate() + i);
-        this.setState({
-            today: new_today
-        });
-
-        let year  = new_today.getFullYear()
-        let month = new_today.getMonth() + 1 // January is 0!
-        let day   = new_today.getDate()
-        const request = new Request(
-            `/api/week/${year}/${month}/${day}`,
-            {headers: {}}
-        );
-
-        fetch(request)
-        .then(response => response.json())
-        .then(matrix => {
-            this.setState({matrix: matrix});
-        });
     }
     
     render() {
         
         const heading = SiteHeading({title: "Week view"});
-        const nav = <WeekNav today={this.state.today} onClick={(e) => this.handleNavClick(e)} dayClick={this.props.dayClick} newResClick={this.props.newResClick} />
+        const nav = <WeekNav today={this.props.today} onClick={this.props.navClick} dayClick={this.props.dayClick} newResClick={this.props.newResClick} />
         let rows = [];
         // running through the hours from 8 to 22 (or 0 to 14)
         for (let i = 0; i < 14; i++) {
@@ -165,7 +156,7 @@ class WeekCalendar extends Component {
                 {heading}
                 {nav}
                 <table className="table weektable table-responsive-sm">
-                    {WeekTableHead({today: this.state.today, weekday: this.state.today.getDay()})}
+                    {WeekTableHead({today: this.props.today, weekday: this.props.today.getDay()})}
                     <tbody>
                         {rows}
                     </tbody>
