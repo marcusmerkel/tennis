@@ -77,7 +77,7 @@ The "today"-state also determines which date will be displayed by the child comp
 
 #### DayCalendar.js
 
-This is the default view of the app: A **calendar of one day** (default: actual today) with one row _per hour_ and one column _per tennis court_ that displays which court is at what time available (colored green) or occupied (colored red).
+This is the default view of the app: A **calendar of one day** (default, inherited from App.js's _today_ state: actual today) with one row _per hour_ and one column _per tennis court_ that displays which court is at what time available (colored green) or occupied (colored red).
 
 It has as child components the _TableHead_, the _DayNav_ (navigation to move forward up to 14 days into the future) to change the displayed day or change to the New-Reservation-view, as well as a list of _DayRows_ (one table row per hour) that themselves consist of _HourCells_.
 

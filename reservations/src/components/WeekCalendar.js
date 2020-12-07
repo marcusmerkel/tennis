@@ -79,7 +79,7 @@ class WeekRow extends Component {
     render() {
         const cells = [];
         for (let i = 0; i < 7; i++) {
-            const key = formatDate(new Date(Date.now() + (86400000 * i))) + ":" + String(this.props.hour + 8); // key = date:hour
+            const key = formatDate(new Date(this.props.today.getFullYear(), this.props.today.getMonth(), this.props.today.getDate() + i)) + ":" + String(this.props.hour + 8); // key = date:hour
             const av = this.props.matrix[i][this.props.hour];
             const cl = av > 0 ? this.props.handleHourClick : null;
             cells.push(<HourCell av={av} id={key} key={key} onClick={cl} />)
@@ -148,7 +148,7 @@ class WeekCalendar extends Component {
         let rows = [];
         // running through the hours from 8 to 22 (or 0 to 14)
         for (let i = 0; i < 14; i++) {
-            rows.push(<WeekRow key={i} hour={i} matrix={this.state.matrix} handleHourClick={this.props.handleWeekHourClick} />)
+            rows.push(<WeekRow key={i} today={this.props.today} hour={i} matrix={this.state.matrix} handleHourClick={this.props.handleWeekHourClick} />)
         }
 
         return (
